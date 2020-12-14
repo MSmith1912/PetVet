@@ -1,7 +1,9 @@
 package com.Mark.PetVet.petVet;
 
 import com.Mark.PetVet.petVet.models.Animal;
+import com.Mark.PetVet.petVet.services.GeneralService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,9 @@ import org.springframework.web.context.WebApplicationContext;
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class AnimalTests {
+
+    @Autowired
+    GeneralService generalService;
 
     @Autowired
     WebApplicationContext webApplicationContext;
@@ -44,9 +49,52 @@ public class AnimalTests {
         this.mockMvc = null;
     }
 
+    // vertebrate or invertebrate
+
+    // VERTEBRATE
+    // reptiles
+    // fish
+    // amphibians
+    // birds
+    // mammals
+
+    // INVERTEBRATES
+    // insects
+    // arachnids
+    // crustaceans
+
+
     @Test
     public void testThat_AnAnimal_CanBeCreated() {
         Animal animal = new Animal();
+        animal.setGroup("vertebrate");
+        animal.setClassification("mammal");
+        animal.setSpecies("Canine");
+        animal.setBreed("Staffy");
+
+        animal.setName("Sky");
+        animal.setDOB("01-04-2018");
+        animal.setWeight(24.53);
+        animal.setDescription("A beautiful black and white staff with brown paws and a white chest");
+
+        generalService.save(animal);
+        Assertions.assertNotNull(animal.getAnimalId());
+        Assertions.assertNotNull(animal.getGroup());
+        Assertions.assertNotNull(animal.getClassification());
+        Assertions.assertNotNull(animal.getSpecies());
+        Assertions.assertNotNull(animal.getBreed());
+        Assertions.assertNotNull(animal.getName());
+        Assertions.assertNotNull(animal.getDOB());
+        Assertions.assertNotNull(animal.getWeight());
+        Assertions.assertNotNull(animal.getDescription());
+    }
+
+    @Test
+    public void testThat_Animal_CanBeRetreived_ViaAnimalID() {
+        Animal animalFromDB = generalService.findByAnimalId(1).get();
+        Assertions.assertNotNull(animalFromDB);
+        Assertions.assertEquals(animalFromDB.getName(), "Sky");
+        System.err.println(animalFromDB);
     }
 
 }
