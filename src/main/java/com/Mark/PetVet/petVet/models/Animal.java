@@ -34,11 +34,15 @@ public class Animal {
     @Column(name ="animal_description")
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name="animal_owner")
+    private User animal_owner;
+
     public Animal() {
 
     }
 
-    public Animal(String group, String classification, String species, String breed, String name, String DOB, Double weight, String description) {
+    public Animal(String group, String classification, String species, String breed, String name, String DOB, Double weight, String description, User animal_owner) {
         this.group = group;
         this.classification = classification;
         this.species = species;
@@ -47,6 +51,7 @@ public class Animal {
         this.DOB = DOB;
         this.weight = weight;
         this.description = description;
+        this.animal_owner = animal_owner;
     }
 
     public int getAnimalId() {
@@ -121,25 +126,34 @@ public class Animal {
         this.description = description;
     }
 
+    public User getAnimal_owner() {
+        return animal_owner;
+    }
+
+    public void setAnimal_owner(User animal_owner) {
+        this.animal_owner = animal_owner;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Animal animal = (Animal) o;
         return animalId == animal.animalId &&
-                Objects.equals(group, animal.group) &&
-                Objects.equals(classification, animal.classification) &&
-                Objects.equals(species, animal.species) &&
-                Objects.equals(breed, animal.breed) &&
-                Objects.equals(name, animal.name) &&
-                Objects.equals(DOB, animal.DOB) &&
-                Objects.equals(weight, animal.weight) &&
-                Objects.equals(description, animal.description);
+                group.equals(animal.group) &&
+                classification.equals(animal.classification) &&
+                species.equals(animal.species) &&
+                breed.equals(animal.breed) &&
+                name.equals(animal.name) &&
+                DOB.equals(animal.DOB) &&
+                weight.equals(animal.weight) &&
+                description.equals(animal.description) &&
+                animal_owner.equals(animal.animal_owner);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(animalId, group, classification, species, breed, name, DOB, weight, description);
+        return Objects.hash(animalId, group, classification, species, breed, name, DOB, weight, description, animal_owner);
     }
 
     @Override
@@ -152,8 +166,10 @@ public class Animal {
                 ", breed='" + breed + '\'' +
                 ", name='" + name + '\'' +
                 ", DOB='" + DOB + '\'' +
-                ", weight='" + weight + '\'' +
+                ", weight=" + weight +
                 ", description='" + description + '\'' +
+                ", animal_owner=" + animal_owner +
                 '}';
     }
+
 }

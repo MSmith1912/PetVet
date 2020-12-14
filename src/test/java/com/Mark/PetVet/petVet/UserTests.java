@@ -1,5 +1,6 @@
 package com.Mark.PetVet.petVet;
 
+import com.Mark.PetVet.petVet.models.Animal;
 import com.Mark.PetVet.petVet.models.User;
 import com.Mark.PetVet.petVet.services.GeneralService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -61,7 +64,7 @@ public class UserTests {
         user.setAccess("Admin");
 
         generalService.save(user);
-        Assertions.assertNotNull(user.getUserId());
+        Assertions.assertNotNull(user.getUser_id());
         Assertions.assertNotNull(user.getUsername());
         Assertions.assertNotNull(user.getPassword());
         Assertions.assertNotNull(user.getFirstName());
@@ -76,6 +79,13 @@ public class UserTests {
         Assertions.assertNotNull(userFromDB);
         Assertions.assertEquals(userFromDB.getUsername(), "MSmith1912");
         System.err.println(userFromDB);
+    }
+
+    @Test
+    public void testThat_User_CanHave_ListOfAnimals() {
+        List<Animal> usersPets = generalService.findUserPets(1);
+        Assertions.assertEquals(usersPets.size(), 2);
+        System.err.println(usersPets);
     }
 
 
