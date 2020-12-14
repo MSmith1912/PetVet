@@ -70,4 +70,13 @@ public class UserTests {
         System.err.println(user);
     }
 
+    @Test
+    public void testThat_User_CanBeRetreived_ViaUserId() {
+        User userFromDB = generalService.findUserById(1).get();
+        Assertions.assertNotNull(userFromDB);
+        Assertions.assertEquals(userFromDB.getUsername(), "MSmith1912");
+        System.err.println(userFromDB);
+    }
+
+
 }

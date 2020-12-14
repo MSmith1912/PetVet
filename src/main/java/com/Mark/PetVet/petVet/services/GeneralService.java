@@ -34,4 +34,8 @@ public class GeneralService {
     public User save(User user) {
         return userDao.save(user);
     }
+
+    public Optional<User> findUserById(int userId) {
+        return userDao.findById(userId);
+    }
 }
