@@ -1,5 +1,7 @@
 package com.Mark.PetVet.petVet.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -126,6 +128,7 @@ public class Animal {
         this.description = description;
     }
 
+    @JsonBackReference
     public User getAnimal_owner() {
         return animal_owner;
     }

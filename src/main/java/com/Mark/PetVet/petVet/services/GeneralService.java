@@ -43,4 +43,8 @@ public class GeneralService {
     public List<Animal> findUserPets(int userId) {
         return animalDao.findUsersPets(userId);
     }
+
+    public List<User> getAllUsers() {
+        return userDao.findAllUsers();
+    }
 }

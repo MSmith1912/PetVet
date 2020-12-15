@@ -1,5 +1,7 @@
 package com.Mark.PetVet.petVet.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -112,6 +114,7 @@ public class User {
         this.access = access;
     }
 
+    @JsonManagedReference
     public List<Animal> getPets() {
         return pets;
     }

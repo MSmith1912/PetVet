@@ -14,11 +14,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,6 +41,8 @@ public class UserTests {
     MockMvc mockMvc;
 
     MockHttpSession session;
+
+    final static String USER_CONTROLLER_URI = "/userController";
 
     @BeforeEach
     public void setUp() {
@@ -75,7 +81,7 @@ public class UserTests {
 
     @Test
     public void testThat_User_CanBeRetreived_ViaUserId() {
-        User userFromDB = generalService.findUserById(1).get();
+        User userFromDB = generalService.findUserById(2).get();
         Assertions.assertNotNull(userFromDB);
         Assertions.assertEquals(userFromDB.getUsername(), "MSmith1912");
         System.err.println(userFromDB);
@@ -83,10 +89,25 @@ public class UserTests {
 
     @Test
     public void testThat_User_CanHave_ListOfAnimals() {
-        List<Animal> usersPets = generalService.findUserPets(1);
+        List<Animal> usersPets = generalService.findUserPets(2);
         Assertions.assertEquals(usersPets.size(), 2);
         System.err.println(usersPets);
     }
 
+    @Test
+    public void testThat_AllTrades_CanBeRetrieved() {
+        List<User> allTrades = generalService.getAllUsers();
+        Assertions.assertTrue(allTrades.size() > 0);
+        System.err.println(allTrades);
+    }
 
+    @Test
+    public void testThat_AllTrades_CanBeretrieved_Viacontroller() throws Exception {
+
+        ResultActions result = this.mockMvc.perform(get(USER_CONTROLLER_URI + "/GetAllUsers")
+                .session(session)
+                .contentType("application/json"))
+                .andExpect(status().isOk());
+        Assertions.assertNotNull(result);
+    }
 }
