@@ -88,6 +88,19 @@ public class UserTests {
     }
 
     @Test
+    public void testThat_User_CanBeretrieved_Viacontroller() throws Exception {
+
+        ResultActions result = this.mockMvc.perform(get(USER_CONTROLLER_URI + "/GetUserById/" + 1)
+                .session(session)
+                .contentType("application/json"))
+                .andExpect(status().isOk());
+        String expectedResult = "{\"user_id\":1,\"username\":\"JSmith\",\"password\":\"password\",\"firstName\":\"John\",\"lastName\":\"Smith\",\"access\":\"Admin\",\"pets\":[],\"dob\":\"29-06-1967\"}";
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(expectedResult, result.andReturn().getResponse().getContentAsString());
+    }
+
+    @Test
     public void testThat_User_CanHave_ListOfAnimals() {
         List<Animal> usersPets = generalService.findUserPets(2);
         Assertions.assertEquals(usersPets.size(), 2);
@@ -95,19 +108,33 @@ public class UserTests {
     }
 
     @Test
-    public void testThat_AllTrades_CanBeRetrieved() {
+    public void testThat_AllUsers_CanBeRetrieved() {
         List<User> allTrades = generalService.getAllUsers();
         Assertions.assertTrue(allTrades.size() > 0);
         System.err.println(allTrades);
     }
 
     @Test
-    public void testThat_AllTrades_CanBeretrieved_Viacontroller() throws Exception {
+    public void testThat_AllUsers_CanBeretrieved_Viacontroller() throws Exception {
 
         ResultActions result = this.mockMvc.perform(get(USER_CONTROLLER_URI + "/GetAllUsers")
                 .session(session)
                 .contentType("application/json"))
                 .andExpect(status().isOk());
         Assertions.assertNotNull(result);
+    }
+
+    @Test
+    public void testThat_User_CanBeDeleted() {
+        List<User> allUsersBeforeDeletion = generalService.getAllUsers();
+        int sizeBefore = allUsersBeforeDeletion.size();
+        System.err.println(sizeBefore);
+        generalService.deleteUserById(1);
+
+        List<User> allUsersAfterDeletion = generalService.getAllUsers();
+        int sizeAfter = allUsersAfterDeletion.size();
+        System.err.println(sizeAfter);
+
+        Assertions.assertNotEquals(sizeBefore, sizeAfter);
     }
 }

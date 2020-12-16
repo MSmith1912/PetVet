@@ -7,9 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/userController")
@@ -21,8 +23,11 @@ public class UserController {
 
     @GetMapping("/GetAllUsers")
     public ResponseEntity<List<User>> getAllUsers() {
-//        List<User> usersForFront = generalService.getAllUsers();
-//        return ResponseEntity.ok(usersForFront);
         return ResponseEntity.ok(generalService.getAllUsers());
+    }
+
+    @GetMapping("GetUserById/{user_id}")
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable("user_id") int user_id) {
+        return ResponseEntity.ok(generalService.findUserById(user_id));
     }
 }

@@ -36,8 +36,8 @@ public class GeneralService {
         return userDao.save(user);
     }
 
-    public Optional<User> findUserById(int userId) {
-        return userDao.findById(userId);
+    public Optional<User> findUserById(int user_id) {
+        return userDao.findById(user_id);
     }
 
     public List<Animal> findUserPets(int userId) {
@@ -46,5 +46,9 @@ public class GeneralService {
 
     public List<User> getAllUsers() {
         return userDao.findAllUsers();
+    }
+
+    public void deleteUserById(int user_id) {
+        userDao.deleteById(user_id);
     }
 }
