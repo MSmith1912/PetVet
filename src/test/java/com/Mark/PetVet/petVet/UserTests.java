@@ -2,6 +2,7 @@ package com.Mark.PetVet.petVet;
 
 import com.Mark.PetVet.petVet.models.Animal;
 import com.Mark.PetVet.petVet.models.User;
+import com.Mark.PetVet.petVet.models.UserRequest;
 import com.Mark.PetVet.petVet.services.GeneralService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -21,7 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -80,6 +81,22 @@ public class UserTests {
     }
 
     @Test
+    public void testThat_User_CanBeCreated_Viacontroller() throws Exception {
+
+        UserRequest newUser = new UserRequest("JSmith", "password", "John", "Smith", "29-06-1967", "Admin");
+
+        ResultActions result = this.mockMvc.perform(post(USER_CONTROLLER_URI + "/CreateUser")
+                .session(session)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(newUser)))
+                .andExpect(status().isOk());
+        String expectedResult = "{\"user_id\":6,\"username\":\"JSmith\",\"password\":\"password\",\"firstName\":\"John\",\"lastName\":\"Smith\",\"access\":\"Admin\",\"pets\":null,\"dob\":\"29-06-1967\"}";
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(expectedResult, result.andReturn().getResponse().getContentAsString());
+    }
+
+    @Test
     public void testThat_User_CanBeRetreived_ViaUserId() {
         User userFromDB = generalService.findUserById(2).get();
         Assertions.assertNotNull(userFromDB);
@@ -88,7 +105,7 @@ public class UserTests {
     }
 
     @Test
-    public void testThat_User_CanBeretrieved_Viacontroller() throws Exception {
+    public void testThat_User_CanBeRetrieved_Viacontroller() throws Exception {
 
         ResultActions result = this.mockMvc.perform(get(USER_CONTROLLER_URI + "/GetUserById/" + 1)
                 .session(session)
@@ -115,7 +132,7 @@ public class UserTests {
     }
 
     @Test
-    public void testThat_AllUsers_CanBeretrieved_Viacontroller() throws Exception {
+    public void testThat_AllUsers_CanBeRetrieved_Viacontroller() throws Exception {
 
         ResultActions result = this.mockMvc.perform(get(USER_CONTROLLER_URI + "/GetAllUsers")
                 .session(session)
@@ -136,5 +153,15 @@ public class UserTests {
         System.err.println(sizeAfter);
 
         Assertions.assertNotEquals(sizeBefore, sizeAfter);
+    }
+
+    @Test
+    public void testThat_User_CanBerDeleted_Viacontroller() throws Exception {
+
+        ResultActions result = this.mockMvc.perform(patch(USER_CONTROLLER_URI + "/DeleteUserById/" + 2)
+                .session(session)
+                .contentType("application/json"))
+                .andExpect(status().isOk());
+        Assertions.assertNotNull(result);
     }
 }

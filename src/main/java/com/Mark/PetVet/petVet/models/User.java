@@ -3,6 +3,7 @@ package com.Mark.PetVet.petVet.models;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,6 +47,7 @@ public class User {
         this.lastName = lastName;
         this.DOB = DOB;
         this.access = access;
+        this.pets = new ArrayList<>();
     }
 
     public User(String username, String password, String firstName, String lastName, String DOB, String access, List<Animal> pets) {
